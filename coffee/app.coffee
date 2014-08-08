@@ -55,6 +55,10 @@ spinner_cover_opts =
 
 $ ->
   window.l10n = new L10n
+  window.settingsPanel = new SettingsPanel
+
+  window.addEventListener 'resize', ->
+    settingsPanel.reposition()
 
   # Make sure we would update strings when localization event is emitted
   l10n.addEventListener 'localizationchange', () ->
