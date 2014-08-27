@@ -58,7 +58,9 @@ class SettingsPanel
           @close()
         ,
         'Save': =>
-          window.l10n.changeLang(@languageSelect.val())
+          language = @languageSelect.val()
+          Settings.set 'language', language
+          window.l10n.changeLang(language)
           window.theme.changeTheme(@themeSelect.val())
           @close()
 

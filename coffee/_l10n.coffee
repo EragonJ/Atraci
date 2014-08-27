@@ -6,7 +6,7 @@ class L10n
     @folder = 'l10n/'
     @l10nFileSuffix = '.ini'
     @metadataPath = 'metadata.json'
-    @callbacks = []
+    @handlers = []
 
   getSupportedLanguages: (cb) ->
     $.ajax(
@@ -87,20 +87,23 @@ class L10n
 
   addEventListener: (eventName, callback) ->
     if eventName is 'localizationchange'
-      @callbacks.push callback
+      @handlers.push callback
 
   removeEventListener: (eventName, callback) ->
     if eventName is 'localizationchange'
-      callbackIndex = @callbacks.indexOf(callback)
+      callbackIndex = @handlers.indexOf(callback)
       if callbackIndex >= 0
-        @callbacks.splice(callbackIndex, 1)
+        @handlers.splice(callbackIndex, 1)
 
-  changeLang: (lang) ->
-    if lang
-      @currentLang = lang
-
-    @fetchIniData(() =>
-      @callbacks.forEach((callback) ->
+  changeLang: (lang, callback) ->
+    callback = callback || ->
+    if !lang
+      callback()
+    else
+      @fetchIniData(() =>
+        @currentLang = lang
+        @handlers.forEach((handler) ->
+          handler()
+        )
         callback()
       )
-    )

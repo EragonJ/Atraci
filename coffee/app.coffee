@@ -114,7 +114,12 @@ $ ->
         $ele.text(l10n.get(l10nId, params))
     )
 
-  l10n.changeLang()
+  l10n.changeLang('en', ->
+    language = Settings.get 'language'
+    console.log language
+    # if language isnt undefined
+    #   l10n.changeLang(language)
+  )
 
   $("#tracklistSorter").change ->
     window.tracklist.populate(
